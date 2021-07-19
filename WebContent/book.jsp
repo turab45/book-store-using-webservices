@@ -129,7 +129,7 @@ table.table td .add {
 
 						$.ajax({
 
-									url : './BookServlet?action=getAll',
+									url : 'http://localhost:8080/bookStore/mytestapi/book/getAll',
 									type : 'GET',
 									success : function(data) {
 										for (var i = 0; i < data.length; i++) {
@@ -142,7 +142,7 @@ table.table td .add {
 
 						$.ajax({
 
-							url : './AuthorServlet?action=getAll',
+							url : 'http://localhost:8080/bookStore/mytestapi/author/getAll',
 							type : 'GET',
 							success : function(data) {
 								for (var i = 0; i < data.length; i++) {
@@ -160,11 +160,32 @@ table.table td .add {
 							});
 
 						$('#addBtn').on('click', function(){
+							
 							name = $('#book_title').val();
-							var author = $('#country option:selected').val();
+							var authorName = $('#country option:selected').val();
+							
+							var author = $.ajax({
+								url : 'http://localhost:8080/bookStore/mytestapi/author/getByName/'+authorName,
+								type : 'GET',
+								data:{'GetConfig':'YES'},
+			                    dataType:"JSON"
+							}).responseJSON;
+
+							var book = {
+									'author':{
+										"id": author.id,
+								        "name": author.name,
+								        "noOfPublications": author.noOfPublications
+										},
+									"title":name
+							};
 							$.ajax({
-								url:'./BookServlet?action=create&&name='+name+'&&author='+author,
+								url:'http://localhost:8080/bookStore/mytestapi/book/create',
 								type: "POST",
+								data: JSON.stringify(book),
+								headers: {
+							      	"content-type": "application/json;charset=UTF-8" // Or add this line
+							    },
 								success:function(data){
 									
 									$('#bookTable').append('<tr id='+data.id+'><td data-target=name>'+ data.title+'</td><td data-target=publications>'+data.author.name+ '</td><td> <a class="edit" data-id='+data.id+' title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a><a class="delete" data-id='+data.id+' title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></td>');

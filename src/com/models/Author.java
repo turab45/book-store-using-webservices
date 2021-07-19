@@ -47,6 +47,11 @@ public class Author {
 	public void setNoOfPublications(Integer noOfPublications) {
 		this.noOfPublications = noOfPublications;
 	}
+
+	@Override
+	public String toString() {
+		return "Author [id=" + id + ", name=" + name + ", noOfPublications=" + noOfPublications + "]";
+	}
 	
 	
 	

@@ -62,4 +62,11 @@ public class AuthorController {
 	public List<Author> getAll(){
 		return authorDaoImpl.getAllAuthor();
 	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getByName/{name}")
+	public String getByName(@PathParam("name") String name) {
+		return gson.toJson(authorDaoImpl.getAuthorByName(name));
+	}
 }
