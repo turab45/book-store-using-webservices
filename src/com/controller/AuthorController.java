@@ -11,12 +11,14 @@ import javax.ws.rs.core.MediaType;
 
 import com.dao.AuthorDao;
 import com.daoimpl.AuthorDaoImpl;
+import com.google.gson.Gson;
 import com.models.Author;
 
 @Path("author")
 public class AuthorController {
 
 	AuthorDao authorDaoImpl = new AuthorDaoImpl();
+	Gson gson = new Gson();
 	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -42,9 +44,9 @@ public class AuthorController {
 		
 		Integer result = authorDaoImpl.deleteAuthor(author);
 		if (result > 0) {
-			return "success";
+			return gson.toJson("success");
 		}
-		return "error";
+		return gson.toJson("error");
 	}
 	
 	@GET

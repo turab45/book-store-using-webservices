@@ -130,7 +130,7 @@ table.table td .add {
 
 						$.ajax({
 
-									url : './AuthorServlet?action=getAll',
+									url : 'http://localhost:8080/bookStore/mytestapi/author/getAll',
 									type : 'GET',
 									success : function(data) {
 										for (var i = 0; i < data.length; i++) {
@@ -151,9 +151,18 @@ table.table td .add {
 					$('#addBtn').on('click', function(){
 						var name = $('#author_name').val();
 						var publications = $('#publications').val();
+
+						var author = {
+								"name":name,
+								"noOfPublications":publications
+								}
 						$.ajax({
-							url:'./AuthorServlet?action=create&&name='+name+'&&publications='+publications,
+							url:'http://localhost:8080/bookStore/mytestapi/author/create',
 							type: "POST",
+							data: JSON.stringify(author),
+							headers: {
+						      	"content-type": "application/json;charset=UTF-8" // Or add this line
+						    },
 							success:function(data){
 
 								$('#exampleModal').modal('hide');
@@ -196,9 +205,20 @@ table.table td .add {
 									$('#updateBtn').on('click', function(){
 										name = $('#author_name').val();
 										publications = $('#publications').val();
+
+										var author = {
+												"id":id,
+												"name":name,
+												"noOfPublications":publications
+												}
+										
 										$.ajax({
-											url:'./AuthorServlet?action=update&&id='+id+'&&name='+name+'&&publications='+publications,
+											url:'http://localhost:8080/bookStore/mytestapi/author/update',
 											type: "POST",
+											data: JSON.stringify(author),
+											headers: {
+										      	"content-type": "application/json;charset=UTF-8" // Or add this line
+										    },
 											success:function(data){
 
 												$('#exampleModal').modal('hide');
@@ -234,15 +254,15 @@ table.table td .add {
 							if (confirm('Are you sure you want to delete this record?')) {
 								$.ajax({
 
-									url: './AuthorServlet?action=delete&&id='+id,
-									type: 'Post',
-									success:function(data, status){
-										if(status == 'success'){
-											console.log('Inside if')
-											$('#'+id).remove();
-											}
-							
-										}		
+									url: 'http://localhost:8080/bookStore/mytestapi/author/delete/'+id,
+									type: 'GET',
+									headers: {
+								      	"content-type": "application/json;charset=UTF-8" // Or add this line
+								    },
+								    success: function (data){
+								    	$("#"+id).remove();
+								    },
+								   
 
 									});
 								
