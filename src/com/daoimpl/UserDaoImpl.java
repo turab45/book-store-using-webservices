@@ -147,7 +147,7 @@ public class UserDaoImpl implements UserDao {
 			query.setParameter("n", email);
 			query.setParameter("p", password);
 			
-			user = (User) query.getResultList().get(0);
+			user = (User) query.getSingleResult();
 			
 			transaction.commit();
 			System.out.println("Successfully fetched.");
@@ -157,6 +157,7 @@ public class UserDaoImpl implements UserDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Error : " + e.getMessage());
+			
 		}
 		return user;
 	}

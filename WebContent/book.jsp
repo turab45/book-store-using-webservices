@@ -125,6 +125,8 @@ table.table td .add {
 	$(document).ready(
 					function() {
 
+						var author = {};
+						
 						$('#updateBtn').hide();
 
 						$.ajax({
@@ -164,23 +166,20 @@ table.table td .add {
 							name = $('#book_title').val();
 							var authorName = $('#country option:selected').val();
 							
-							var author = $.ajax({
-								url : 'http://localhost:8080/bookStore/mytestapi/author/getByName/'+authorName,
-								type : 'GET',
-								data:{'GetConfig':'YES'},
-			                    dataType:"JSON"
-							}).responseJSON;
-
+			
 							var book = {
 									'author':{
-										"id": author.id,
-								        "name": author.name,
-								        "noOfPublications": author.noOfPublications
-										},
+										"id":0,
+										"name":authorName,
+										"noOfPublications":0,
+									},
 									"title":name
 							};
+
+							console.log("book = ", book);
+							
 							$.ajax({
-								url:'http://localhost:8080/bookStore/mytestapi/book/create',
+								url:'http://localhost:8080/bookStore/mytestapi/book/create2',
 								type: "POST",
 								data: JSON.stringify(book),
 								headers: {
@@ -229,9 +228,24 @@ table.table td .add {
 									$('#updateBtn').on('click', function(){
 										name = $('#book_title').val();
 										var author = $('#country option:selected').val();
+
+										var book = {
+												'author':{
+													"id":0,
+													"name":author,
+													"noOfPublications":0,
+												},
+												"id":rId,
+												"title":name
+										};
+										
 										$.ajax({
-											url:'./BookServlet?action=update&&id='+rId+'&&name='+name+'&&author='+author,
+											url:'http://localhost:8080/bookStore/mytestapi/book/update2',
 											type: "POST",
+											data:JSON.stringify(book),
+											headers: {
+										      	"content-type": "application/json;charset=UTF-8" // Or add this line
+										    },
 											success:function(data){
 												
 														$('#'+rId).children('td[data-target=name]').text(data.name);
@@ -267,8 +281,11 @@ table.table td .add {
 							if (confirm('Are you sure you want to delete this record?')) {
 								$.ajax({
 
-									url: './BookServlet?action=delete&&id='+id,
-									type: 'Post',
+									url: 'http://localhost:8080/bookStore/mytestapi/book/delete/'+id,
+									type: 'GET',
+									headers: {
+								      	"content-type": "application/json;charset=UTF-8" // Or add this line
+								    },
 									success:function(data, status){
 										if(status == 'success'){
 											console.log('Inside if')

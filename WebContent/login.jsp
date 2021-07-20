@@ -14,7 +14,7 @@
 </head>
 <body>
 <div class="signup-form">
-    <form action="./UserServlet?action=login" method="post">
+    <form action="#" method="post" id="login-form">
 		<h2>Login</h2>
 		
         <div class="form-group">       	
@@ -38,19 +38,35 @@
 
 $(document).ready(function(){
 
+	$("#login-form").on("submit", function(event){
 
-	$("#loginbtn").on('click', function(){
+		event.preventDefault();
 
 		var username = $('#username').val();
 		var password = $('#password').val();
-		
-		console.log(username);
-		console.log(password);
 
-		
+		var user = {
+				"username":username,
+				"password":password
+				}
 
+		$.ajax({
+			url: 'http://localhost:8080/bookStore/mytestapi/user/login',
+            type: "POST",
+            data:JSON.stringify(user),
+            headers: {
+		      	"content-type": "application/json;charset=UTF-8" // Or add this line
+		    },
+		    success:function(data){
+			    
+			    window.location = "home.jsp";
+			    },
+			error:function(data){
+				alert("Something went wrong...");
+				}
 		});
-	
+		
+	});
 	
 });
 
